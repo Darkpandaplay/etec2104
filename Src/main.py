@@ -1,10 +1,21 @@
 import cherrypy
 import mako.template
+import mako.lookup
 import os.path
+import random
+import quotes
 
 PYPATH = os.path.dirname(__file__)
+lookup = mako.lookup.TemplateLookup(
+    directories=[os.path.dirname(__file__)]
+)
 
 class App:
+    def quote(self):
+        q = random.choice(quotes.quotations)
+        t = lookup.get_template("quotes.html")
+        return t.render(quote=q)
+
     @cherrypy.expose
     def index(self):
         s = mako.template.Template(filename=f"{PYPATH}/../html/home.html")
